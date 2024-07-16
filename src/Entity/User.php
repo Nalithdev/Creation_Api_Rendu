@@ -190,4 +190,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this;
+    }
 }

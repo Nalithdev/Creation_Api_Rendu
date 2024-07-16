@@ -3,14 +3,32 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CommandeRepository;
+use App\State\PatchCommand;
+use App\State\UserPasswordHasherProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to get this command'),
+        new Post(),
+        new Get(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to get this command'),
+        new Put(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to edit this user'),
+        new Patch(processor: PatchCommand::class ,security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to delete this user'),
+    ],
+)]
 class Commande
 {
     #[ORM\Id]
@@ -130,6 +148,8 @@ class Commande
     {
         $this->list_boisson->removeElement($listBoisson);
 
+
         return $this;
     }
+
 }

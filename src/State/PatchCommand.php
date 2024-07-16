@@ -13,7 +13,7 @@ class PatchCommand implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        $command = Commande::class->find($data->Command->getId());
+        $command = Commande::class->findOneBy($data->Command->getId());
 
         // On vérifie que le status est bien "en attente"
         if ($command->getStatus() === "payée") {

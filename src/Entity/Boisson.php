@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[GetCollection()]
 #[Patch()]
 #[Delete()]
-#[Post(security: "is_granted('ROLE_PATRON')")]
+#[Post()]
 class Boisson
 {
     #[ORM\Id]

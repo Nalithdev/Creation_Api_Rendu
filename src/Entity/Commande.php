@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\User;
 use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource]
@@ -42,6 +44,9 @@ class Commande
     public function __construct()
     {
         $this->list_boisson = new ArrayCollection();
+        $this -> CreatedDate = new \DateTime();
+        $this -> status = "En cours de préparation";
+        $this -> barman = null;
     }
 
     public function getId(): ?int
@@ -108,6 +113,9 @@ class Commande
 
         return $this;
     }
+
+
+
 
     /**
      * @return Collection<int, Boisson>

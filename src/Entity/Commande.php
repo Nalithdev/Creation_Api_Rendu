@@ -17,7 +17,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource(
     operations: [
@@ -148,8 +147,6 @@ class Commande
     {
         $this->list_boisson->removeElement($listBoisson);
 
-
         return $this;
     }
-
 }

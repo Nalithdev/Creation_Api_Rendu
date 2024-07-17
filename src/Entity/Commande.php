@@ -19,13 +19,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource(
+    forceEager: false,
     operations: [
-        new GetCollection(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to get this command'),
+        new GetCollection(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR')", securityMessage: 'You are not allowed to get this command'),
         new Post(),
-        new Get(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to get this command'),
-        new Put(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to edit this user'),
-        new Patch(processor: PatchCommand::class ,security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to edit this user'),
-        new Delete(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR'))", securityMessage: 'You are not allowed to delete this user'),
+        new Get(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR')", securityMessage: 'You are not allowed to get this command'),
+        new Put(processor: PatchCommand::class ,security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR')", securityMessage: 'You are not allowed to edit this user'),
+        new Patch(processor: PatchCommand::class, security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR')", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_PATRON') or is_granted('ROLE_BARMAN') or is_granted('ROLE_SERVEUR')", securityMessage: 'You are not allowed to delete this user'),
     ],
 )]
 class Commande
@@ -49,6 +50,7 @@ class Commande
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $status = null;
+    private ?string $currentstatus = null;
 
     /**
      * @var Collection<int, Boisson>
@@ -59,6 +61,10 @@ class Commande
     public function __construct()
     {
         $this->list_boisson = new ArrayCollection();
+        $this -> CreatedDate = new \DateTime();
+        $this -> status = "En cours de préparation";
+        $this -> currentstatus = "En cours de préparation";
+        $this -> barman = null;
     }
 
     public function getId(): ?int
@@ -122,6 +128,18 @@ class Commande
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCurrentStatus(): ?string
+    {
+        return $this->currentstatus;
+    }
+
+    public function setCurrentStatus(string $currentstatus): static
+    {
+        $this->currentstatus = $currentstatus;
 
         return $this;
     }

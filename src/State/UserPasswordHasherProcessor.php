@@ -28,10 +28,11 @@ class UserPasswordHasherProcessor implements ProcessorInterface
             return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
         }
 
-        // On vérifie que la class courante corresponde à l'utilisateur connecté
-        if ($data instanceof User && $data->getId() != null && $data != $this->security->getUser()) {
+
+        // dans le cas de l'utilisation d'un superviseur on ne peut utiliser cette condition
+        /*if ($data instanceof User && $data->getId() != null && $data != $this->security->getUser()) {
             throw new Exception('not allowed to edit password');
-        }
+        }*/
 
 
         // Si on a reçu une valeur pour plainPassword, on hash le mot de passe

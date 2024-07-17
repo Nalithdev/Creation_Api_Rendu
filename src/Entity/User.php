@@ -24,12 +24,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
     operations: [
-        new GetCollection(security: "is_granted('ROLE_ADMIN')", securityMessage: 'You are not allowed to get users'),
-        new Post(processor: UserPasswordHasherProcessor::class),
-        new Get(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to get this user'),
-        new Put(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
-        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to edit this user'),
-        new Delete(security: "is_granted('ROLE_ADMIN') or object == user", securityMessage: 'You are not allowed to delete this user'),
+        new GetCollection(security: "is_granted('ROLE_PATRON')", securityMessage: 'You are not allowed to get users'),
+        new Post(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_PATRON')", securityMessage: 'You are not allowed to create users'),
+        new Get(security: "is_granted('ROLE_PATRON') or object == user", securityMessage: 'You are not allowed to get this user'),
+        new Put(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_PATRON') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Patch(processor: UserPasswordHasherProcessor::class, security: "is_granted('ROLE_PATRON') or object == user", securityMessage: 'You are not allowed to edit this user'),
+        new Delete(security: "is_granted('ROLE_PATRON') or object == user", securityMessage: 'You are not allowed to delete this user'),
     ],
         normalizationContext: ['groups' => ['read']],
         denormalizationContext: ['groups' => ['write']]

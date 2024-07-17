@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: BoissonRepository::class)]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 
@@ -47,6 +48,10 @@ class Boisson
     #[Groups('read')]
     #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'list_boisson')]
     private Collection $commandes;
+
+    #[ORM\OneToOne(mappedBy: 'boisson', cascade: ['persist', 'remove'])]
+    #[Groups('read, write')]
+    private ?Media $media = null;
 
     public function __construct()
     {
@@ -105,6 +110,28 @@ class Boisson
         if ($this->commandes->removeElement($commande)) {
             $commande->removeListBoisson($this);
         }
+
+        return $this;
+    }
+
+    public function getMedia(): ?Media
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?Media $media): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($media === null && $this->media !== null) {
+            $this->media->setBoisson(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($media !== null && $media->getBoisson() !== $this) {
+            $media->setBoisson($this);
+        }
+
+        $this->media = $media;
 
         return $this;
     }

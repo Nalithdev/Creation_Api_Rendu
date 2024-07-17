@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[Vich\Uploadable]
 #[ApiResource(
+    forceEager: false,
     normalizationContext: ['groups' => ['read']],
     types: ['https://schema.org/MediaObject'],
     operations: [
